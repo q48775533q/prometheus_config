@@ -6,11 +6,8 @@ tips：
 
 下载地址:
 https://github.com/prometheus/
-
 https://www.consul.io/
-
 https://github.com/hashicorp/consul-template
-
 https://github.com/grafana/grafana
 
 该文档时版本:
