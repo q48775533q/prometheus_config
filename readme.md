@@ -4,22 +4,22 @@ tips：
 配置软件的文档太多了。 有什么需要，可以给我发邮件哦。
 我会逐步完善的。
 
-下载地址:
-https://github.com/prometheus/
-https://www.consul.io/
-https://github.com/hashicorp/consul-template
-https://github.com/grafana/grafana
+# 下载地址:
+	https://github.com/prometheus/
+	https://www.consul.io/
+	https://github.com/hashicorp/consul-template
+	https://github.com/grafana/grafana
 
-该文档时版本:
-prometheus-2.7.0-rc.2.linux-amd64
-node_exporter-0.17.0.linux-amd64
-alertmanager-0.16.0.linux-amd64
-grafana-5.4.3-1.x86_64.rpm
-consul_1.4.2_linux_amd64
-consul-template_0.20.0_linux_amd64
+# 该文档时版本:
+	prometheus-2.7.0-rc.2.linux-amd64
+	node_exporter-0.17.0.linux-amd64
+	alertmanager-0.16.0.linux-amd64
+	grafana-5.4.3-1.x86_64.rpm
+	consul_1.4.2_linux_amd64
+	consul-template_0.20.0_linux_amd64
 
-本来想写安装文档了的。后来想想放弃了。网上关于安装的内容真的太多了。
-我这边就整理一些思路和踩过的坑打出来吧。
+	本来想写安装文档了的。后来想想放弃了。网上关于安装的内容真的太多了。
+	我这边就整理一些思路和踩过的坑打出来吧。
 
 
 #################
