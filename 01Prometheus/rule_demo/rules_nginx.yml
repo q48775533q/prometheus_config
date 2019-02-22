@@ -1,0 +1,61 @@
+groups:
+- name: aws_ec2_nginx-vts-web
+  rules:
+  - alert: nginx-vts-web-status
+    expr: up{job="nginx-vts-web"} == 0
+    for: 1m
+    labels:
+      instance: '{{$labels.instance}}'
+      priority: "3"
+      type: 'nginx' 
+    annotations:
+      description: '{{ $labels.instance }} nginx-vts-web  is down please handle'
+      summary: 'jobname: {{$labels.instance}} nginx-vts-web is down please handle'
+  - alert: nginx application 5xx gt 10 per min
+    expr: sum(nginx_vts_filter_requests_total{direction="5xx",job="nginx-vts-web"} - nginx_vts_filter_requests_total{direction="5xx",job="nginx-vts-web"} offset 1m) by (application,direction) > 10
+    for: 1m
+    labels:
+      type: 'nginx' 
+      priority: "4"
+    annotations:
+      description: ' {{$labels.application}} {{$labels.direction}} >10/m'
+      summary: '  {{$labels.application}} {{$labels.direction}}  >10/m'
+  - alert: nginx application 5xx gt 1 per min
+    expr: sum(nginx_vts_filter_requests_total{direction="5xx",job="nginx-vts-web"} - nginx_vts_filter_requests_total{direction="5xx",job="nginx-vts-web"} offset 1m) by (application,direction,filter_name) > 1
+    for: 1m
+    labels:
+      type: 'nginx-detail' 
+      priority: "4"
+    annotations:
+      description: ' {{$labels.application}} {{$labels.direction}}{{$labels.filter_name}} >10/m'
+      summary: '  {{$labels.application}} {{$labels.direction}}  >10/m'
+ # - alert: nginx application 2xx gt 10 per min
+ #   expr: sum(nginx_vts_filter_requests_total{direction="2xx",job="nginx-vts-web"} - nginx_vts_filter_requests_total{direction="2xx",job="nginx-vts-web"} offset 1m) by (application,direction) > 10
+ #   for: 1m
+ #   labels:
+ #     test: 'yes' 
+ #     priority: "4"
+ #   annotations:
+ #     description: ' {{$labels.application}} {{$labels.direction}} >10/m'
+ #     summary: '  {{$labels.application}} {{$labels.direction}}  >10/m'
+
+  - alert: nginx interface time  gt 300ms
+    expr: nginx_vts_filter_request_seconds{job="nginx-vts-web",filter_name!="/v1/users/kyc/upload"}*1000 > 300
+    for: 1m
+    labels:
+      type: 'nginx' 
+      priority: "4"
+    annotations:
+      description: ' {{$labels.application}} {{$labels.filter}} {{$labels.filter_name}}  >300ms'
+      summary: ' {{$labels.application}} {{$labels.filter}} {{$labels.filter_name}} >300ms'
+
+  - alert: nginx interface time  gt 2s
+    expr: nginx_vts_filter_request_seconds{job="nginx-vts-web",filter_name="/v1/users/kyc/upload"}*1000 > 2000
+    for: 1m
+    labels:
+      type: 'nginx' 
+      priority: "4"
+    annotations:
+      description: ' {{$labels.application}} {{$labels.filter}} {{$labels.filter_name}}  >300ms'
+      summary: ' {{$labels.application}} {{$labels.filter}} {{$labels.filter_name}} >300ms'
+ 

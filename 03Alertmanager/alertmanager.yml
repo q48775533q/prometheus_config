@@ -1,0 +1,65 @@
+# 配置文件参考https://prometheus.io/docs/alerting/configuration/ 
+# 全局配置
+global:
+  resolve_timeout: 1m # 等待时间，如果该时间内业务恢复了，则不报警。
+
+  # smtp配置
+  smtp_from: "15011114877@139.com"
+  smtp_smarthost: 'smtp.139.com:25'
+  smtp_auth_username: "15011114877"
+  smtp_auth_password: "15011114877"
+  # smtp_require_tls: true
+
+# 邮件的内容模版，这个我不咋喜欢，就不贴了，百度去搜吧，模版很多的
+templates:
+  #- 'templates/*.tmpl'
+
+
+# 报警路有规则
+route:
+  group_by: ['severity','alias'] # 报警分组，根据prometheus 的 lable 进行报警分组，相同的报警可以在同一个邮件出现
+  group_wait: 10s # 在组内等待所配置的时间，如果同组内，10秒内出现相同报警，在一个组内出现。
+  group_interval: 30s # 如果组内内容不变化，30秒后发送。
+  repeat_interval: 1m # 发送报警间隔，如果指定时间内没有修复，则报警
+  receiver: "default" # 默认路有，没有特定规则的，发送到这个地址
+
+  routes: # 路由和标签，根据match来指定发送目标，如果 rule的lable 包含 severity: 3 使用 other_send 来发送
+    - receiver: other_send
+      match:
+        severity: 3
+
+
+# 发送规则参考
+receivers:
+- name: "default"
+  email_configs:
+  - send_resolved: true # 恢复后是否报警
+    to: "15011114877@139.com"
+    #html: '{{ template "test.html" . }}'
+
+- name: "other_send"
+  email_configs:
+  - send_resolved: true
+    to: "15011114877@139.com"
+    #html: '{{ template "test.html" . }}'
+
+
+# 抑制器参考
+# 如果match ， 也就是rule的lab标签，包含severity: '1'  则不发送 severity: '2' 
+# equal这个东西，官方的描述是，必须包含相同的标签，该规则才生效.
+# 参考一下rule吧，我有简单的描述。
+
+inhibit_rules: 
+  - source_match: 
+     severity: '1' 
+    target_match: 
+     severity: '2' 
+    equal: ['lable_name']
+
+# 包含severity: '2'  则不发送 severity: '3' 
+
+  - source_match: 
+     severity: '2' 
+    target_match: 
+     severity: '3' 
+    equal: ['lable_name']    

@@ -1,0 +1,52 @@
+# 话说，都写成中文，要是看不懂，转行吧。
+# https://prometheus.io/docs/prometheus/latest/configuration/configuration/
+# 全局配置
+global:
+  scrape_interval:     15s # 每15秒抓取一次数据，默认值为1分钟
+  evaluation_interval: 15s # 每15分钟检测一次可用性，默认值为1分钟
+  # scrape_timeout 全局设置超时时间，这个注掉了。
+
+# Alertmanager配置，需要在targets添加ip和端口，也可以使用主机名和域名
+alerting:
+  alertmanagers:
+    - static_configs:
+      #- targets: ['127.0.0.1:9093']
+
+# 根据全局文件 'evaluation_interval' 的时间，根据 rule 文件进行检查，可配置多个。
+rule_files:
+  - "./first_rules.yml" 
+  # - "second_rules.yml"
+
+# 抓取配置配置
+scrape_configs:
+
+  # 第一个，根据json来读取配置文件的格式
+  - job_name: 'linuxnode-discorvery'
+    file_sd_configs:
+      - files:
+        - /root/prometheus-2.7.0-rc.2.linux-amd64/conf.d/lnode.json # 这个文件是由consul生成的，看其他文档吧，通过模版文件 lnode.ctmpl 生成配置文件。
+
+  # 第二个，根据具体的主机ip+端口来采集文件，file_sd_configs类似。
+  - job_name: 'hosts'
+    scrape_interval: 10s
+    static_configs:
+    - targets: ['192.168.199.210:9100']
+      labels:
+        instance: 'promethus-server'
+        alias: 'a_s1'
+    - targets: ['192.168.199.211:9100']
+      labels:
+        instance: 'node1'
+        alias: 'a_node1'
+    - targets: ['192.168.199.211:9100']
+      labels:
+        instance: 'node2'
+        alias: 'a_node2'
+
+  # 第三个，这个是一个jvm的参考
+  - job_name: 'jvm'
+    scrape_interval: 10s 
+    static_configs:
+    - targets: ['192.168.199.211:8080']
+      labels:
+        instance: 'java1'

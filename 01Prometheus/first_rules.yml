@@ -1,0 +1,36 @@
+groups:
+- name: cipan1
+  rules:
+  - alert: cipan1
+    expr: (100 - ((sum by(instance, mountpoint) (node_filesystem_free_bytes{fstype=~"ext4|xfs"}) / sum by(instance, mountpoint) (node_filesystem_size_bytes{fstype=~"ext4|xfs"})) * 100)) > 40
+    for: 5s
+    labels: # 其他没啥可说的，lable是可以给alert来使用的。 inhibit_rules 来匹配，equal 存在相同标签，抑制器才生效。
+      severity: 1
+      lable_name: 1
+    annotations:
+      summary: "Instance {{ $labels.instance }} ,{{ $labels.mountpoint  }} down"
+      description: "Instance {{ $labels.instance }} ,{{ $labels.mountpoint  }} down"
+
+- name: cipan2
+  rules:
+  - alert: cipan2
+    expr: (100 - ((sum by(instance, mountpoint) (node_filesystem_free_bytes{fstype=~"ext4|xfs"}) / sum by(instance, mountpoint) (node_filesystem_size_bytes{fstype=~"ext4|xfs"})) * 100)) > 60
+    for: 5s
+    labels:
+      severity: 2
+      lable_name: 2
+    annotations:
+      summary: "Instance {{ $labels.instance }} ,{{ $labels.mountpoint  }} down"
+      description: "Instance {{ $labels.instance }} ,{{ $labels.mountpoint  }} down"
+
+- name: hhhhhh
+  rules:
+  - alert: hhhhhh
+    expr: (100 - ((sum by(instance, mountpoint) (node_filesystem_free_bytes{fstype=~"ext4|xfs"}) / sum by(instance, mountpoint) (node_filesystem_size_bytes{fstype=~"ext4|xfs"})) * 100)) > 80
+    for: 5s
+    labels:
+      severity: 3
+      lable_name: 1
+    annotations:
+      summary: "Instance {{ $labels.instance }} ,{{ $labels.mountpoint  }} down"
+      description: "Instance {{ $labels.instance }} ,{{ $labels.mountpoint  }} down"

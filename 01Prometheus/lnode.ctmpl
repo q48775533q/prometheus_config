@@ -1,0 +1,17 @@
+[
+
+{{ range nodes }}
+{
+"targets": ["{{ .Address }}:9100"],
+"labels": {
+"hostname": "{{ .Node }}"
+}
+},
+{{ end }}
+{
+"targets": ["192.168.199.210:9100"],
+"labels": {
+"hostname": "prom-server"
+}
+}
+]

@@ -1,0 +1,20 @@
+groups:
+- name: example-node-exporter-rules
+  rules:
+  # The count of CPUs per node, useful for getting CPU time as a percent of total.
+  - alert: instance:node_cpus:count
+    expr: count(node_cpu_seconds_total{mode="idle"}) without (cpu,mode) > 2
+    for: 1s
+    annotations:
+      description: ' {{$labels.application}} {{$labels.filter}} {{$labels.filter_name}}  >300ms'
+      summary: ' {{$labels.application}} {{$labels.filter}} {{$labels.filter_name}} >300ms'
+- name: node_up
+  rules:
+  # The count of CPUs per node, useful for getting CPU time as a percent of total.
+  - alert: instance:node_cpus:count
+    expr: up{instance="node",job="node"} != 1
+    for: 1s
+    annotations:
+      description: ' {{$labels.application}} {{$lables.instance}}  is up'
+      summary: ' {{$labels.application}} {{$lables.instance}}  is up'
+

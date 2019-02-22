@@ -1,0 +1,38 @@
+groups:
+- name: up
+  rules:
+  - alert: mysql
+    expr: up{instance="db1",job="mysql"} != 0
+    for: 10s
+    labels:
+      instance: '{{$labels.instance}}'
+      priority: "3"
+      type: 'mysql' 
+    annotations:
+      description: '{{ $labels.instance }} nginx-vts-web  is down please handle'
+      summary: 'jobname: {{$labels.instance}} nginx-vts-web is down please handle'
+
+
+
+  - alert: node
+    expr: up{job="node"} != 0
+    for: 10s
+    labels:
+      instance: '{{$labels.instance}}'
+      priority: "3"
+      type: 'node' 
+    annotations:
+      description: '{{ $labels.instance }} nginx-vts-web  is down please handle'
+      summary: 'jobname: {{$labels.instance}} nginx-vts-web is down please handle'
+
+
+  - alert: nginx
+    expr: up{instance="web",job="nginx"} != 0
+    for: 10s
+    labels:
+      instance: '{{$labels.instance}}'
+      priority: "3"
+      type: 'nginx' 
+    annotations:
+      description: '{{ $labels.instance }} nginx-vts-web  is down please handle'
+      summary: 'jobname: {{$labels.instance}} nginx-vts-web is down please handle'
