@@ -3,7 +3,7 @@
 # 全局配置
 global:
   scrape_interval:     15s # 每15秒抓取一次数据，默认值为1分钟
-  evaluation_interval: 15s # 每15分钟检测一次可用性，默认值为1分钟
+  evaluation_interval: 15s # 每15秒检测一次可用性，默认值为1分钟
   # scrape_timeout 全局设置超时时间，这个注掉了。
 
 # Alertmanager配置，需要在targets添加ip和端口，也可以使用主机名和域名
